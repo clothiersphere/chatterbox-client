@@ -5,19 +5,22 @@ $(document).ready(function (){
 
   app.init = function() {
 
-    var messages = app.fetch();
+    app.fetch();
+    setInterval(app.clearMessages, 4999);
+    setInterval(app.fetch, 5000);
 
     $('.username').on('click', function (){
       app.addFriend();
+    });
 
-    })
     $(".submit").on('submit', function (e){
       e.preventDefault();
 
       var submittedMessage = $('#message').val();
+      var username = $('#user').val();
+      console.log(username);
       console.log(submittedMessage);
       app.handleSubmit();
-
     });
 
   };
@@ -45,11 +48,12 @@ $(document).ready(function (){
     var request = $.ajax({
       url: url,
       type: 'POST',
-      data: JSON.stringify({
-        text: message,
-        username: window.location.href.split("username=")[1],
-        roomname: 'Tamara rhymes with Orange'
-      }),
+      data: JSON.stringify(
+        message
+        // text: message,
+        // username: window.location.href.split("username=")[1],
+        // roomname: "I'm not Edwin.com"
+      ),
       contentType: 'application/json',
       success: function(data) {
         console.log('chatterbox: you suck, but message was sent');
@@ -72,7 +76,7 @@ $(document).ready(function (){
     var $text = '<div class = "messagetext msg-part"> '+ _.escape(message.text) + '</div>'
     var $roomname = '<div class = "roomname msg-part"> '+ _.escape(message.roomname) + '</div>'
     var $message = '<div class = "messagebody">'+ $username + ': ' + $text + ' -- from ' + $roomname + '</div>'
-    $('#chats').append($('<div>' + $message + '</div>'));
+    $('#chats').prepend($('<div>' + $message + '</div>'));
 
   };
 
@@ -85,7 +89,13 @@ $(document).ready(function (){
 
   app.handleSubmit = function (){
     var message = $('#message').val();
-    app.send(message);
+    var username = $('#user').val() || "I suck."
+    var dataToSend = {};
+    dataToSend.text = message;
+    dataToSend.username = username;
+    dataToSend.roomname = "whatever";
+
+    app.send(dataToSend);
   };
 
   app.init();
