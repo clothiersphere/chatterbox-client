@@ -6,12 +6,10 @@ $(document).ready(function (){
   app.init = function() {
 
     app.fetch();
-    setInterval(app.clearMessages, 4999);
-    setInterval(app.fetch, 5000);
+    setInterval(app.clearMessages, 400000);
+    setInterval(app.fetch, 500000);
 
-    $('.username').on('click', function (){
-      app.addFriend();
-    });
+
 
     $(".submit").on('submit', function (e){
       e.preventDefault();
@@ -22,6 +20,10 @@ $(document).ready(function (){
       console.log(submittedMessage);
       app.handleSubmit();
     });
+
+
+    app.currentRoom = undefined;
+    app.friends = [];
 
   };
 
@@ -48,12 +50,7 @@ $(document).ready(function (){
     var request = $.ajax({
       url: url,
       type: 'POST',
-      data: JSON.stringify(
-        message
-        // text: message,
-        // username: window.location.href.split("username=")[1],
-        // roomname: "I'm not Edwin.com"
-      ),
+      data: JSON.stringify(message),
       contentType: 'application/json',
       success: function(data) {
         console.log('chatterbox: you suck, but message was sent');
@@ -72,11 +69,26 @@ $(document).ready(function (){
 
   app.addMessage = function(message) {
 
-    var $username = '<div class = "username msg-part"> '+ _.escape(message.username) +  '</div>'
-    var $text = '<div class = "messagetext msg-part"> '+ _.escape(message.text) + '</div>'
-    var $roomname = '<div class = "roomname msg-part"> '+ _.escape(message.roomname) + '</div>'
-    var $message = '<div class = "messagebody">'+ $username + ': ' + $text + ' -- from ' + $roomname + '</div>'
-    $('#chats').prepend($('<div>' + $message + '</div>'));
+    var username = '<div class = "username msg-part"> '+ _.escape(message.username) +  '</div>'
+    var text = '<div class = "messagetext msg-part"> '+ _.escape(message.text) + '</div>'
+    var roomname = '<div class = "roomname msg-part"> '+ _.escape(message.roomname) + '</div>'
+    var $message = $('<div class = "messagebody">'+ username + ': ' + text + ' -- from ' + roomname + '</div>');
+
+    $('.username').on('click', function (e){
+      e.stopPropagation();
+      var friendname = $(this).text();
+      app.addFriend(friendname);
+    });
+
+    if (app.currentRoom){
+      if (message.roomname !== app.currentRoom){
+        $message.hide();
+      }
+    }
+    if (_.contains(app.friends, message.username)) {
+      $message.addClass('friend');
+    };
+    $('#chats').prepend($message);
 
   };
 
@@ -84,18 +96,31 @@ $(document).ready(function (){
     $('#roomSelect').append($('<div>' + roomName + '</div>'));
   };
 
-  app.addFriend = function(){
+  app.addFriend = function(friendName){
+    app.friends.push(friendName);
+    app.refresh();
+  };
+
+  app.refresh = function(){
+    app.clearMessages();
+    app.fetch();
   };
 
   app.handleSubmit = function (){
     var message = $('#message').val();
     var username = $('#user').val() || "I suck."
+    var roomname = $('#roomname').val();
     var dataToSend = {};
     dataToSend.text = message;
     dataToSend.username = username;
-    dataToSend.roomname = "whatever";
+    dataToSend.roomname = roomname;
+    app.currentRoom = roomname;
+
+
+
 
     app.send(dataToSend);
+    app.refresh();
   };
 
   app.init();

@@ -89,3 +89,17 @@ form input[type=text] {
 .msg-part {
     display: inline-block;
 }
+
+.hidden {
+    visibility: hidden;
+}
+
+.friend {
+    font-weight: bold;
+}
+
+.username {
+    color: purple;
+    cursor: pointer;
+    font-size: 16px;
+}
