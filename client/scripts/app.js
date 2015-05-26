@@ -3,6 +3,14 @@ var app = {};
 var url = 'https://api.parse.com/1/classes/chatterbox';
 
 app.init = function() {
+  // debugger;
+  $('.username').on('click', function (){
+    app.addFriend();
+
+  })
+  $("#send").on('submit', function (){
+    app.handleSubmit();
+  })
 };
 
 
@@ -38,3 +46,30 @@ app.send = function(message) {
 app.clearMessages = function() {
   $('#chats').html('');
 };
+
+app.addMessage = function(message) {
+
+  var $username = '<div class = "username"> '+ message.username +  '</div>'
+  var $text = '<div class = "messagetext"> '+ message.text + '</div>'
+  var $roomname = '<div class = "roomname"> '+ message.roomname + '</div>'
+  var $message = '<div class = "messagebody">'+ $username + $text + $roomname + '</div>'
+  $('#chats').append($('<div>' + $message + '</div>'));
+
+};
+
+app.addRoom = function(roomName) {
+  $('#roomSelect').append($('<div>' + roomName + '</div>'));
+};
+
+app.addFriend = function(){
+};
+
+app.handleSubmit = function (){
+  // var val = $("input[type=submit][clicked=true]").val()
+  var message = $('#message').val();
+  debugger;
+  app.send(message);
+
+
+};
+
