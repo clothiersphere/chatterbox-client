@@ -16,11 +16,8 @@ $(document).ready(function (){
 
       var submittedMessage = $('#message').val();
       var username = $('#user').val();
-      console.log(username);
-      console.log(submittedMessage);
       app.handleSubmit();
     });
-
 
     app.currentRoom = undefined;
     app.friends = [];
@@ -45,8 +42,6 @@ $(document).ready(function (){
   };
 
   app.send = function(message) {
-    // debugger;
-    console.log(message);
     var request = $.ajax({
       url: url,
       type: 'POST',
@@ -69,12 +64,12 @@ $(document).ready(function (){
 
   app.addMessage = function(message) {
 
-    var username = '<div class = "username msg-part"> '+ _.escape(message.username) +  '</div>'
-    var text = '<div class = "messagetext msg-part"> '+ _.escape(message.text) + '</div>'
-    var roomname = '<div class = "roomname msg-part"> '+ _.escape(message.roomname) + '</div>'
+    var username = '<div class = "username msg-part">'+ _.escape(message.username) +  '</div>'
+    var text = '<div class = "messagetext msg-part">'+ _.escape(message.text) + '</div>'
+    var roomname = '<div class = "roomname msg-part">'+ _.escape(message.roomname) + '</div>'
     var $message = $('<div class = "messagebody">'+ username + ': ' + text + ' -- from ' + roomname + '</div>');
 
-    $('.username').on('click', function (e){
+    $message.find('.username').on('click', function (e){
       e.stopPropagation();
       var friendname = $(this).text();
       app.addFriend(friendname);
