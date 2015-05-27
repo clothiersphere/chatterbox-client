@@ -85,6 +85,9 @@ form input[type=text] {
 
 .messagebody {
     position: relative;
+    margin: 10px;
+    background-color: yellow;
+    border-radius: 5px;
 }
 .msg-part {
     display: inline-block;
@@ -99,7 +102,12 @@ form input[type=text] {
 }
 
 .username {
-    color: purple;
+    color: rgb(250, 116, 250);
+    cursor: pointer;
+    font-size: 16px;
+}
+.roomname {
+    color: rgb(50,205,50);
     cursor: pointer;
     font-size: 16px;
 }

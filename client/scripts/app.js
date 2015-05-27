@@ -75,6 +75,13 @@ $(document).ready(function (){
       app.addFriend(friendname);
     });
 
+    $message.find('.roomname').on('click', function (e){
+      e.stopPropagation();
+      var roomname = $(this).text();
+      app.currentRoom = roomname;
+      app.refresh();
+    })
+
     if (app.currentRoom){
       if (message.roomname !== app.currentRoom){
         $message.hide();
